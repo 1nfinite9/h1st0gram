@@ -25,7 +25,7 @@ void fill_column(char table[][X_SIZE*2+1], int col, int data[])
     
     int cnt = data[col];
     
-    while (i > 0) {
+    while (i >= 0) {
         if (cnt>=0) { /*If data is still necessary fill with [*/
             table[i][left] = '['; /*Fill left column*/
             table[i][right] = ']'; /*Fill right column*/
