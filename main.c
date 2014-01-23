@@ -12,8 +12,7 @@ int main() {
     #else
     // Receive input from user or open file
     int data[MAXSIZE];
-    int cnt;
-    cnt = get_data(data);
+    int cnt = get_data(data);
     printf("Inputted data count = %d\n", cnt);
     #endif
     

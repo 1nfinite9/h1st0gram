@@ -7,10 +7,11 @@ int get_data(int data[])
     int cnt = 0;
     
     printf("Enter your data: ");
-    while ((scanf("%d", &data[i]))!=EOF && (i < MAXSIZE)) {
-        printf("Enter your data: ");
+    while ((i < MAXSIZE) && (scanf("%d", &data[i]))!=EOF) {
         i++;
         cnt++;
+        if (i < MAXSIZE) /*Stop printing if datacount already at 10*/
+            printf("Enter your data: ");
     }
     
     if (i != MAXSIZE) { /*Refill data with zeroes if not full*/
@@ -45,7 +46,7 @@ void fill_column(char table[][MAXSIZE*2+1], int col, int data[])
     int right = col*2+1;
     int i = Y_SIZE;
     
-    int cnt = data[col];
+    int cnt = data[col]; /*cnt is for looping through the value of each column*/
     
     while (i >= 0) {
         if (cnt>=0) { /*If data is still necessary fill with [*/
@@ -57,7 +58,7 @@ void fill_column(char table[][MAXSIZE*2+1], int col, int data[])
             table[i][left] = ' ';
             table[i][right] = ' ';
         }
-        i--;
+        i--; /*Go up one row*/
     }
 }
 
