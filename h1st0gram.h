@@ -1,5 +1,5 @@
-#define X_SIZE 10
-#define Y_SIZE 10
+#define X_SIZE 20
+#define Y_SIZE 20
 
 void print_h1s(int *pDim);
 
