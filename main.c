@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "h1st0gram.h"
 
-#define TEST_MODE 0
+#define TEST_MODE 1
 
 int main() {
     
@@ -17,7 +17,8 @@ int main() {
     #endif
     
     // Handle data and processing
-    
+    int cnt = getMaxData(data);
+    printf("Max data counted by maxData() = %d\n", cnt);
     
     // Output to screen
     print_h1st0gram(data);

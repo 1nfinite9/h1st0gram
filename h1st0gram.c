@@ -24,6 +24,19 @@ int get_data(int data[])
     return cnt;
 }
 
+int getMaxData(int data[])
+{
+    int max = data[0];
+    int i = 1;
+    while (i < MAXSIZE) {
+        if (max < data[i]) {
+            max = data[i];
+        }
+        i++;
+    }
+    return max;
+}
+
 void fill_x_axis(int axis[], int n)
 {
     int i = 1;
@@ -40,38 +53,37 @@ void fill_y_axis(int axis[], int n)
     }
 }
 
-void fill_column(char table[][MAXSIZE*2+1], int col, int data[])
+void fill_column(char table[][MAXSIZE*2+1], int col, int height, int data[])
 {
     int left = col*2;
     int right = col*2+1;
-    int i = Y_SIZE;
-    
+
     int cnt = data[col]; /*cnt is for looping through the value of each column*/
     
-    while (i >= 0) {
+    while (height >= 0) {
         if (cnt>=0) { /*If data is still necessary fill with [*/
-            table[i][left] = '['; /*Fill left column*/
-            table[i][right] = ']'; /*Fill right column*/
+            table[height][left] = '['; /*Fill left column*/
+            table[height][right] = ']'; /*Fill right column*/
             cnt--;
         }
         else { /**/
-            table[i][left] = ' ';
-            table[i][right] = ' ';
+            table[height][left] = ' ';
+            table[height][right] = ' ';
         }
-        i--; /*Go up one row*/
+        height--; /*Go up one row*/
     }
 }
 
-void fill_table(char table[][MAXSIZE*2+1], int col, int data[])
+void fill_table(char table[][MAXSIZE*2+1], int col, int height, int data[])
 {
     int i = 0;
     int row = 0;
     while (i < col) {
-        fill_column(table, i, data);
+        fill_column(table, i, height, data);
         i++;
     }
     
-    while (row < Y_SIZE) { /*Fill last column with \0's*/
+    while (row < height) { /*Fill last column with \0's*/
         table[row][i*2] = '\0';
         row++;
     }
@@ -90,16 +102,17 @@ void print_x_axis(int x_axis[], int n)
 
 void print_h1st0gram(int data[])
 {
+    int height = getMaxData(data);
     int x_axis[MAXSIZE];
-    int y_axis[Y_SIZE+1];
+    int y_axis[height+1]; /*Plus one row for printing last row with 0*/
     int line = 0;
-    char table[Y_SIZE][MAXSIZE*2+1] = {{' '}};
+    char table[height][MAXSIZE*2+1];
     
-    fill_table(table, MAXSIZE, data);
+    fill_table(table, MAXSIZE, height, data);
     fill_x_axis(x_axis, MAXSIZE);
-    fill_y_axis(y_axis, Y_SIZE);
+    fill_y_axis(y_axis, height);
 
-    while (line < Y_SIZE) {
+    while (line < height) {
         printf("%2d │%s\n", y_axis[line], table[line]);
         line++;
     }
