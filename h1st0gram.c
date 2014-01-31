@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "h1st0gram.h"
 
-int get_data(int data[])
+int getData(int data[])
 {
     int i = 0;
     int cnt = 0;
@@ -53,15 +53,15 @@ void fill_y_axis(int axis[], int n)
     }
 }
 
-void fill_column(char table[][MAXSIZE*2+1], int col, int height, int data[])
+void fill_column(char table[][MAXSIZE*BARSIZE+1], int col, int height, int data[])
 {
-    int left = col*2;
-    int right = col*2+1;
-
+    int left = col*BARSIZE;
+    int right = col*BARSIZE+(BARSIZE-1);
+    
     int cnt = data[col]; /*cnt is for looping through the value of each column*/
     
     while (height >= 0) {
-        if (cnt>=0) { /*If data is still necessary fill with [*/
+        if (cnt>=0) { /*If data is still necessary fill two columns with []*/
             table[height][left] = '['; /*Fill left column*/
             table[height][right] = ']'; /*Fill right column*/
             cnt--;
@@ -74,7 +74,7 @@ void fill_column(char table[][MAXSIZE*2+1], int col, int height, int data[])
     }
 }
 
-void fill_table(char table[][MAXSIZE*2+1], int col, int height, int data[])
+void fill_table(char table[][MAXSIZE*BARSIZE+1], int col, int height, int data[])
 {
     int i = 0;
     int row = 0;
@@ -84,15 +84,24 @@ void fill_table(char table[][MAXSIZE*2+1], int col, int height, int data[])
     }
     
     while (row < height) { /*Fill last column with \0's*/
-        table[row][i*2] = '\0';
+        table[row][i*BARSIZE] = '\0';
         row++;
     }
 }
 
 void print_x_axis(int x_axis[], int n)
 {
-    int i = 0;
-    printf("    ");
+    int i = 0; /* Set i for first line */
+    
+    printf(" 0 └"); /* Print first line of X-Axis */
+    while (i < MAXSIZE*BARSIZE) {
+        printf("─");
+        i++;
+    }
+    printf("\n");
+    
+    i = 0; /* Reset i for second line */
+    printf("    "); /* Print second line with digits */
     while (i < n) {
         printf("%d ", x_axis[i]);
         i++;
@@ -106,7 +115,7 @@ void print_h1st0gram(int data[])
     int x_axis[MAXSIZE];
     int y_axis[height+1]; /*Plus one row for printing last row with 0*/
     int line = 0;
-    char table[height][MAXSIZE*2+1];
+    char table[height][MAXSIZE*BARSIZE+1];
     
     fill_table(table, MAXSIZE, height, data);
     fill_x_axis(x_axis, MAXSIZE);
@@ -116,6 +125,6 @@ void print_h1st0gram(int data[])
         printf("%2d │%s\n", y_axis[line], table[line]);
         line++;
     }
-    printf(" %d └────────────────────\n", y_axis[line]);
+    
     print_x_axis(x_axis, MAXSIZE);
 }

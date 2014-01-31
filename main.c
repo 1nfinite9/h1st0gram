@@ -3,7 +3,7 @@
 
 #define TEST_MODE 0
 
-int main() {
+int main(int argc, char **argv) {
     
     #if TEST_MODE
     // Initialize test data
@@ -12,7 +12,7 @@ int main() {
     #else
     // Receive input from user or open file
     int data[MAXSIZE];
-    int cnt = get_data(data);
+    int cnt = getData(data);
     printf("Inputted data count = %d\n", cnt);
     #endif
     
