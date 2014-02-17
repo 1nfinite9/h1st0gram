@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include "h1st0gram.h"
 
-#define TEST_MODE 0
+#define TEST_MODE 1
 
 int main(int argc, char **argv) {
     
     #if TEST_MODE
     // Initialize test data
-    int data[MAXSIZE] = { 1, 0, 3, 5, 10, 15, 9, 6, 0, 1 };
+    int data[MAXSIZE] = { 2, 20, 37, 22, 6, 3 };
     
     #else
     // Receive input from user or open file

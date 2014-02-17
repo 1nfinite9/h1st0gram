@@ -24,6 +24,19 @@ int getData(int data[])
     return cnt;
 }
 
+int getMinData(int data[])
+{
+    int min = data[0];
+    int i = 1;
+    while (i < MAXSIZE) {
+        if (min > data[i]) {
+            min = data[i];
+        }
+        i++;
+    }
+    return min;
+}
+
 int getMaxData(int data[])
 {
     int max = data[0];
@@ -37,6 +50,16 @@ int getMaxData(int data[])
     return max;
 }
 
+double getAveData(int data[])
+{
+    int i, sum = 0;
+    for (i = 0; i < MAXSIZE; i++) {
+        sum += data[i];
+    }
+    
+    return (double)sum / MAXSIZE;
+}
+
 void fill_x_axis(int axis[], int n)
 {
     int i = 1;
@@ -48,8 +71,12 @@ void fill_x_axis(int axis[], int n)
 void fill_y_axis(int axis[], int n)
 {
     int i = 0;
+    if (n % 2 != 0) /*Round-up axis value if maximum is odd number*/
+        n++;
+    
     while (n >= 0) {
-        axis[i++] = n--;
+        axis[i++] = n;
+        n -= 2;
     }
 }
 
@@ -58,7 +85,7 @@ void fill_column(char table[][MAXSIZE*BARSIZE+1], int col, int height, int data[
     int left = col*BARSIZE;
     int right = col*BARSIZE+(BARSIZE-1);
     
-    int cnt = data[col]; /*cnt is for looping through the value of each column*/
+    int cnt = (data[col]+1)/2; /*cnt is for looping through the value of each column*/
     
     while (height >= 0) {
         if (cnt>=0) { /*If data is still necessary fill two columns with []*/
@@ -111,15 +138,16 @@ void print_x_axis(int x_axis[], int n)
 
 void print_h1st0gram(int data[])
 {
-    int height = getMaxData(data);
+    int max = getMaxData(data);
+    int height = (max+1)/2;
     int x_axis[MAXSIZE];
-    int y_axis[height+1]; /*Plus one row for printing last row with 0*/
+    int y_axis[height]; /*Plus one row for printing last row with 0*/
     int line = 0;
     char table[height][MAXSIZE*BARSIZE+1];
     
     fill_table(table, MAXSIZE, height, data);
     fill_x_axis(x_axis, MAXSIZE);
-    fill_y_axis(y_axis, height);
+    fill_y_axis(y_axis, max);
 
     while (line < height) {
         printf("%2d │%s\n", y_axis[line], table[line]);

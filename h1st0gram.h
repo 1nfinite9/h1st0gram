@@ -1,8 +1,10 @@
 #define BARSIZE 2 /* Required to be a multiple of 2 -- 1 block consists of '[' ']' */
-#define MAXSIZE 10
+#define MAXSIZE 6
 
 int getData(int data[]);
+int getMinData(int data[]);
 int getMaxData(int data[]);
+double getAveData(int data[]);
 
 void fill_x_axis(int axis[], int n);
 void fill_y_axis(int axis[], int n);
