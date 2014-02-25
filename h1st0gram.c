@@ -132,24 +132,32 @@ void fill_x_axis(INT_NODE *p)
     RESULT result = { 0, 0, 0, 0, 0, 0, 0 };
     updateResult(&result, p);
     
-    int x_axis_value[result.max+1];
-    int x_axis_count[result.max+1];
-    
-    while ( p != NULL ) {
-        x_axis_value[p->value] = p->value;
-        x_axis_count[p->value]++;
-        p = p->next;
-    }
+    int x_axis_value[result.count];
+    int x_axis_count[result.count];
     
     int i = 0;
-    while ( i < result.max+1 ) {
+    while ( i < result.count ) {
+        x_axis_count[i] = 0;
+        i++;
+    }
+    
+    i = 0;
+    while ( p != NULL ) {
+        x_axis_value[i] = p->value;
+        x_axis_count[i]++;
+        p = p->next;
+        i++;
+    }
+    
+    i = 0;
+    while ( i < result.count ) {
         printf("%d ", x_axis_value[i]);
         i++;
     }
     printf("\n");
     
     i = 0;
-    while ( i < result.max+1 ) {
+    while ( i < result.count ) {
         printf("%d ", x_axis_count[i]);
         i++;
     }
