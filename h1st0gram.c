@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "h1st0gram.h"
 
 int getData(int data[])
@@ -60,7 +61,102 @@ double getAveData(int data[])
     return (double)sum / MAXSIZE;
 }
 
-void fill_x_axis(int axis[], int n)
+void updateResult(RESULT *set, INT_NODE *n)
+{
+    while ( n!=NULL ) {
+        if ( set->count!=0 ) {
+            set->count++;
+            set->sum += n->value;
+            if (n->value < set->min) {
+                set->min = n->value;
+            }
+            if (n->value > set->max) {
+                set->max = n->value;
+            }
+            set->mean = (double)set->sum / set->count;
+        }
+        else {
+            set->count++;
+            set->sum = n->value;
+            set->min = n->value;
+            set->max = n->value;
+            set->mean = n->value;
+        }
+        n = n->next;
+    }
+    printf("Results updated.\n");
+}
+
+void printResult(RESULT *set)
+{
+    printf("******************************\n");
+    printf("* Data count      = %-8d *\n", set->count);
+    printf("* Sum of all data = %-8d *\n", set->sum);
+    printf("* Minimum data    = %-8d *\n", set->min);
+    printf("* Maximum data    = %-8d *\n", set->max);
+    printf("* Mean of data    = %-8.2g *\n", set->mean);
+    // printf("* Median of data  = %-8.2f *\n", set->median);
+    // printf("* Mode of data    = %-8.2f *\n", set->mode);
+    printf("******************************\n");
+}
+
+int getRawData(INT_NODE *p)
+{
+    INT_NODE *ptop = p;
+    INT_NODE *pnew;
+    int input;
+    int count;
+    
+    while ( scanf("%d", &input) != EOF ) {
+        pnew = (INT_NODE*)malloc(sizeof(INT_NODE));
+        
+        pnew->value = input;
+        pnew->next = ptop->next;
+        ptop->next = pnew;
+        count++;
+    }
+    
+    return count;
+}
+
+void printRawData(INT_NODE *p)
+{
+    if ( p != NULL ) {
+        printRawData(p->next);
+        printf("[%p] %2d [%p]\n", p, p->value, p->next);
+    }
+}
+
+void fill_x_axis(INT_NODE *p)
+{
+    RESULT result = { 0, 0, 0, 0, 0, 0, 0 };
+    updateResult(&result, p);
+    
+    int x_axis_value[result.max+1];
+    int x_axis_count[result.max+1];
+    
+    while ( p != NULL ) {
+        x_axis_value[p->value] = p->value;
+        x_axis_count[p->value]++;
+        p = p->next;
+    }
+    
+    int i = 0;
+    while ( i < result.max+1 ) {
+        printf("%d ", x_axis_value[i]);
+        i++;
+    }
+    printf("\n");
+    
+    i = 0;
+    while ( i < result.max+1 ) {
+        printf("%d ", x_axis_count[i]);
+        i++;
+    }
+    printf("\n");
+}
+
+void fill_x_axis_v1(int axis[], int n)
 {
     int i = 1;
     while (i <= n) {
@@ -136,7 +232,33 @@ void print_x_axis(int x_axis[], int n)
     printf("\n");
 }
 
-void print_h1st0gram(int data[])
+void print_h1st0gram(INT_NODE *n)
+{
+    RESULT result = { 0, 0, 0, 0, 0, 0, 0 };
+    updateResult(&result, n);
+    
+    HISTOGRAM h1st0gram = { 0, 0 };
+    h1st0gram.height = (result.max+1)/2;
+    
+    int x_axis[MAXSIZE];
+    int y_axis[h1st0gram.height]; /*Plus one row for printing last row with 0*/
+    int line = 0;
+    char table[h1st0gram.height][MAXSIZE*BARSIZE+1];
+    
+    fill_x_axis(n);
+    // fill_table(table, MAXSIZE, height, data);
+    // fill_x_axis(x_axis, MAXSIZE);
+    // fill_y_axis(y_axis, max);
+
+    // while (line < height) {
+    //     printf("%2d │%s\n", y_axis[line], table[line]);
+    //     line++;
+    // }
+    
+    // print_x_axis(x_axis, MAXSIZE);
+}
+
+void print_h1st0gram_v1(int data[])
 {
     int max = getMaxData(data);
     int height = (max+1)/2;
@@ -146,7 +268,7 @@ void print_h1st0gram(int data[])
     char table[height][MAXSIZE*BARSIZE+1];
     
     fill_table(table, MAXSIZE, height, data);
-    fill_x_axis(x_axis, MAXSIZE);
+    fill_x_axis_v1(x_axis, MAXSIZE);
     fill_y_axis(y_axis, max);
 
     while (line < height) {
